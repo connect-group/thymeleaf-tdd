@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<title data-th-text="${pageTitle}">Lorem Ipsum</title>
+	</head>
+	<body id="hi">
+		<h1 data-th-text="${heading1}">A heading</h1>
+		<p data-th-each="para : ${section1Paragraphs}" data-th-text="${para}">Some text</p>
+		<p data-th-remove="all">Some more text</p>
+		
+		<h2>A sub-heading</h2>
+		<p data-th-each="para : ${section2Paragraphs}" data-th-text="${para}">Sub text</p>
+		<p data-th-remove="all">More sub text</p>
+		<a data-th-href="${href}" href="http://www.example.com/">A Link</a>
+	</body>
+</html>
