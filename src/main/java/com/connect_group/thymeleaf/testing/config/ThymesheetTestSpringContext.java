@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Import({ThymesheetConfig.class})
 public class ThymesheetTestSpringContext extends WebMvcConfigurerAdapter {
 	
-	@Value("${thymeleaf.template.characterEncoding:src/main/webapp}")
+	@Value("${thymeleaf.template.webappPath:src/main/webapp}")
 	protected String webappPath;
 	
     @Autowired
