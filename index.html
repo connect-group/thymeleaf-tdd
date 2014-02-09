@@ -31,37 +31,339 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="thymeleaf-tdd" class="anchor" href="#thymeleaf-tdd"><span class="octicon octicon-link"></span></a>thymeleaf-tdd</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Test Driven Development framework for Spring with Thymeleaf and Thymesheet.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<h2>
+<a name="maven" class="anchor" href="#maven"><span class="octicon octicon-link"></span></a>Maven</h2>
+
+<p>Include the latest release from Maven,</p>
+
+<pre><code>    &lt;dependency&gt;
+        &lt;groupId&gt;com.connect-group&lt;/groupId&gt;
+        &lt;artifactId&gt;thymeleaf-tdd&lt;/artifactId&gt;
+        &lt;version&gt;1.0.0&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>Thymeleaf-TDD makes use of the full Hamcrest suite (version 1.3), and JUnit 4.11; these will be pulled in as dependancies when you include thymeleaf-tdd.</p>
+
+<h2>
+<a name="what-is-thymeleaf" class="anchor" href="#what-is-thymeleaf"><span class="octicon octicon-link"></span></a>What is Thymeleaf?</h2>
+
+<p>Thymeleaf is a Java library. It is an XML / XHTML / HTML5 template engine (extensible to other formats) that can work both in web and non-web environments, best suited for serving XHTML/HTML5.</p>
+
+<p>It provides an optional module for integration with Spring MVC, so that you can use it as a complete substitute of JSP in your applications made with this technology, even with HTML5.</p>
+
+<p>The main goal of Thymeleaf is to provide an elegant and well-formed way of creating powerful natural templates that can be correctly displayed by browsers and therefore work also as static prototypes. </p>
+
+<p>For more detail, see <a href="http://www.thymeleaf.org/">http://www.thymeleaf.org/</a></p>
+
+<h2>
+<a name="what-about-thymeleaf-testing" class="anchor" href="#what-about-thymeleaf-testing"><span class="octicon octicon-link"></span></a>What about Thymeleaf Testing?</h2>
+
+<ul>
+<li>
+<a href="https://github.com/thymeleaf/thymeleaf-testing">https://github.com/thymeleaf/thymeleaf-testing</a>
+Thymeleaf Testing is an alternative (and the original) method of testing Thymeleaf.  It will also work with Thymesheet, if required.
+For Test Driven Development however it was not quite flexible enough: it will allow you to generate an HTML page and perform a "diff" against an expected outcome, which is perfect for many scenarios.  However it does not fit well with TDD where we run a series of independant tests.<br>
+</li>
+</ul><p>So for occassions where the standard test package is not appropriate, or you would prefer to go with a more traditional JUnit approach, thymeleaf-tdd may be a candidate.</p>
+
+<h2>
+<a name="what-is-tdd" class="anchor" href="#what-is-tdd"><span class="octicon octicon-link"></span></a>What is TDD?</h2>
+
+<p>Test Driven Development simply put involves writing a test, then writing code that causes the test to pass.  </p>
+
+<ol>
+<li>RED BAR: Write, and run, a behaviour specification (test) that fails.</li>
+<li>GREEN BAR: Code just enough to meet the specification. Code and test until it passes.</li>
+<li>Refactor, Retest</li>
+</ol><p>Note that writing some code, then adding a test, is NOT TDD.</p>
+
+<p>TDD is a best practice in software development.</p>
+
+<p>For more information, see</p>
+
+<ul>
+<li><a href="http://www.jamesshore.com/Agile-Book/test_driven_development.html">http://www.jamesshore.com/Agile-Book/test_driven_development.html</a></li>
+<li><a href="http://dannorth.net/introducing-bdd/">http://dannorth.net/introducing-bdd/</a></li>
+</ul><h2>
+<a name="what-can-you-test" class="anchor" href="#what-can-you-test"><span class="octicon octicon-link"></span></a>What can you test?</h2>
+
+<p>Using the Thymeleaf-TDD project you can develop and test Thymeleaf custom attribute processors, and Thymeleaf HTML pages.  This provides a way to use TDD to develop HTML with Thymeleaf attributes without running Tomcat or any other servlet container.  It also provides support for TDD of Thymesheet - where the Thymeleaf attributes are separated into an external CSS3 style file.</p>
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>First, you must create a JUnit test class which runs with SpringJUnit4ClassRunner, and uses the default SpringContext supplied with thymeleaf-tdd.  You can create your own Spring configuration required - if you need to scan for beans, for example or customise the spring environment for any reason.  The default Spring configuration uses LEGACYHTML5 but this is easily changed by adding a property to /src/test/resources/test.properties - more on that later.</p>
+
+<p>So an empty JUnit test class appears as follows,</p>
+
+<pre><code>import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import com.connect_group.thymeleaf.testing.config.ThymesheetTestSpringContext;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { ThymesheetTestSpringContext.class })
+public class SampleUnitTest {
+    @Autowired
+    private ThymeleafTestEngine testEngine;
+}
+</code></pre>
+
+<p>To begin with, imagine you have been supplied a HTML file by your frontend development team.  (Or that you have developed it yourself).</p>
+
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Lorem Ipsum&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;A heading&lt;/h1&gt;
+    &lt;p&gt;Some text&lt;/p&gt;
+    &lt;p&gt;Some more text&lt;/p&gt;
+
+    &lt;h2&gt;A sub-heading&lt;/h2&gt;
+    &lt;p&gt;Sub text&lt;/p&gt;
+    &lt;p&gt;More sub text&lt;/p&gt;
+    &lt;a href="http://www.example.com/"&gt;A Link&lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>This can be placed in your webapp - wherever you would normally place your HTML files.  For example, /src/main/webapp/html/test.html</p>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="should-set-title-to-expected-value" class="anchor" href="#should-set-title-to-expected-value"><span class="octicon octicon-link"></span></a>Should Set Title To Expected Value</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>The first thing we need to do is change the HTML page title "Lorem Ipsum", to something dynamic, perhaps supplied by a CMS for example.  In a Spring controller we would add a key/value pair to the ModelAndView object.  But we are testing in isolation of the controller, so we have to create our own Map to represent the model.</p>
+
+<p>So our first test would look something like this,</p>
+
+<pre><code>@Test
+public void shouldSetTitleToExpectedValue() throws Exception {
+  Map&lt;String,Object&gt; model = new HashMap&lt;String,Object&gt;();
+  model.put("pageTitle", "expected title");
+  HtmlElements tags = testEngine.process("/html/test.html", model);
+  assertThat(tags.matching("title"), isSingleElementThat(hasOnlyText("expected title")));
+}
+</code></pre>
+
+<p>Now run the tests; e.g. if your IDE is Eclipse, use the JUnit view to run the test; or from the command line type "mvn test".</p>
+
+<p>The test will fail because we have not added the Thymeleaf tag to the HTML yet!  Great - we got a "Red Bar".</p>
+
+<p>Now we have to update the title by adding in a data-th-text attribute.</p>
+
+<pre><code>    &lt;title data-th-text="${pageTitle}"&gt;Lorem Ipsum&lt;/title&gt;
+</code></pre>
+
+<p>Save the file, run the test: Green bar!  We have written our first unit test.</p>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="should-set-heading-to-expected-value" class="anchor" href="#should-set-heading-to-expected-value"><span class="octicon octicon-link"></span></a> Should Set Heading To Expected Value</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Similarly the "H1" can be set by first writing a test to set the heading, </p>
+
+<pre><code>@Test
+public void shouldSetHeadingToExpectedValue() throws Exception {
+  Map&lt;String,Object&gt; model = new HashMap&lt;String,Object&gt;();
+  model.put("heading1", "expected heading 1");
+  HtmlElements tags = testEngine.process("/html/test.html", model);
+  assertThat(tags.matching("h1"), isSingleElementThat(hasOnlyText("expected heading 1")));      
+}
+</code></pre>
+
+<p>... this will fail when run.  Then add in the attribute for the heading,</p>
+
+<pre><code>    &lt;h1 data-th-text="${heading1}"&gt;A heading&lt;/h1&gt;
+</code></pre>
+
+<p>... run the test again, and you get a Green bar.  Success!</p>
+
+<p>Normally in TDD you should refactor after each test.  In this case there is very little to refactor; however, the tests themselves should be tidied up as we are creating a HashMap in every test, and using the same path "/html/test.html".</p>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="should-create-three-paragraphs-under-heading-1" class="anchor" href="#should-create-three-paragraphs-under-heading-1"><span class="octicon octicon-link"></span></a>Should Create Three Paragraphs Under Heading 1</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>Next lets add in something a little more difficult: We will create paragraphs based upon a list of strings.  For those familiar with Thymeleaf, this means using the data-th-each attribute.</p>
+
+<pre><code>@Test
+public void shouldCreateThreeParagraphsUnderHeading1() throws Exception {
+  Map&lt;String,Object&gt; model = new HashMap&lt;String,Object&gt;();
+  model.put("section1Paragraphs", Arrays.asList("para 1", "para 2", "para 3"));
+  HtmlElements tags = testEngine.process("/html/test.html", model);
+  assertThat(tags.matching("h1~p").size() - tags.matching("h2~p").size(), equalTo(3));      
+}
+</code></pre>
+
+<p>The test above finds tags matching "h1 ~ p".  This means, find all "P" tags which are siblings of H1 and which come after the H1 element.  Similarly, "h2 ~ p" means find all "P" tags which are siblings of H2 and which follow the H2 tag.  We can calculate the number of P tags after the H1 but before the H2 by subtracting.</p>
+
+<p>So the test above creates a list of 3 paragraphs, then tests to see if 3 paragraphs are output.</p>
+
+<p>Run the test - and as expected we get a red bar.  The error message reads, "Expected 3 but was 2".</p>
+
+<p>OK - we havent yet added in the code, so lets do that.</p>
+
+<pre><code>    &lt;p data-th-each="para : ${section1Paragraphs}"&gt;Some text&lt;/p&gt;
+    &lt;p&gt;Some more text&lt;/p&gt;
+</code></pre>
+
+<p>Run the test - and we get another red bar.  This time the error message reads, "Expected 3 but was 4".  If you are stuck at this point you could 'cheat' -- take a look at the HTML that is being created.  There are a couple of ways to do this.</p>
+
+<ol>
+<li>String output = testEngine.toString("/html/test.html", model); System.out.println(output);</li>
+<li>System.out.println(tags);</li>
+</ol><p>So what is being output? Lets take a look...</p>
+
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;&lt;/h1&gt;
+    &lt;p&gt;Some text&lt;/p&gt;
+    &lt;p&gt;Some text&lt;/p&gt;
+    &lt;p&gt;Some text&lt;/p&gt;
+    &lt;p&gt;Some more text&lt;/p&gt;
+
+    &lt;h2&gt;A sub-heading&lt;/h2&gt;
+    &lt;p&gt;Sub text&lt;/p&gt;
+    &lt;p&gt;More sub text&lt;/p&gt;
+    &lt;a href="http://www.example.com/"&gt;A Link&lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>We have 3 copies of "Some text", plus the "Some more text" which was in the original file from our HTML author.  So we need to remove that last P.  Easy enough - add in a data-th-remove="all" attribute.</p>
+
+<pre><code>    &lt;p data-th-each="para : ${section1Paragraphs}"&gt;Some text&lt;/p&gt;
+    &lt;p data-th-remove="all"&gt;Some more text&lt;/p&gt;
+</code></pre>
+
+<p>Run the test again: Green bar!</p>
 
 <h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a name="should-create-three-paragraphs-under-heading-1-with-expected-content" class="anchor" href="#should-create-three-paragraphs-under-heading-1-with-expected-content"><span class="octicon octicon-link"></span></a> Should Create Three Paragraphs Under Heading 1 With Expected Content</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>That's great but as we saw above, all we are testing for is how many paragraphs are output.  We have not tested for the CONTENT of each paragraph.  So lets add a test in for that now.</p>
+
+<pre><code>@Test
+public void shouldCreateThreeParagraphsUnderHeading1WithExpectedContent() throws Exception {
+  Map&lt;String,Object&gt; model = new HashMap&lt;String,Object&gt;();
+  model.put("section1Paragraphs", Arrays.asList("para 1", "para 2", "para 3"));
+  HtmlElements tags = testEngine.process("/html/test.html", model);
+  assertThat(tags.matching("body &gt; p:nth-of-type(-n+3)"), hasOnlyText("para 1", "para 2", "para 3"));
+}
+</code></pre>
+
+<p>Some more CSS3 here: we are asking for the first 3 "p" tags.  The p:nth-of-type(-n+3) will select them for us.
+Now when we run the test it fails and we get the error message, </p>
+
+<pre><code>Expected 3 elements with text ["para 1", "para 2", "para 3"] but: ["some text", "Some text", "Some text"]
+</code></pre>
+
+<p>OK so we can add the text in now - with the data-th-text tag.</p>
+
+<pre><code>    &lt;p data-th-each="para : ${section1Paragraphs}" data-th-text="${para}"&gt;Some text&lt;/p&gt;
+</code></pre>
+
+<p>Run the test again - Green bar! The test passes.</p>
+
+<h2>
+<a name="a-note-on-hamcrest" class="anchor" href="#a-note-on-hamcrest"><span class="octicon octicon-link"></span></a> A note on Hamcrest</h2>
+
+<p>These test assertions have been designed around the Hamcrest assertion model. For more information see <a href="http://hamcrest.org/JavaHamcrest/">http://hamcrest.org/JavaHamcrest/</a> and for a handy quick reference see <a href="http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf">http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf</a></p>
+
+<p>Thymeleaf-TDD adds the following assertions, for testing against the Thymeleaf DOM,</p>
+
+<pre><code>import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.*;
+</code></pre>
+
+<ul>
+<li>exists() returns true if any elements were found</li>
+<li>hasAttribute("href") returns true if the matched element has the named attribute</li>
+<li>hasAttribute("href", "value") returns true if the matched element has the named attribute with the given value</li>
+<li>hasChildren() returns true if the matched element has children</li>
+<li>hasClasses("class1 class2") returns true if the matched element has the named class or classes</li>
+<li>hasComment() returns true if the matched element has a HTML comment as a child</li>
+<li>hasCommentWithText("expected text") returns true if the matched element has a comment containing the expected text</li>
+<li>hasOnlyText("text") returns true if the matched element only contains Text and the text is as expected</li>
+<li>hasOnlyText("text1", "text2", ...) returns true if all of the matched elements contain only text, and the text is the sequence supplied</li>
+<li>isSingleElementThat() checks that the result is exactly one element and allows you to chain additional matchers.  For example, isSingleElementThat(hasClasses("myclass"))</li>
+<li>occursOnce() returns true if exactly one element was found</li>
+</ul><h2>
+<a name="thymesheet-tdd" class="anchor" href="#thymesheet-tdd"><span class="octicon octicon-link"></span></a>Thymesheet TDD</h2>
+
+<p>Up to now we have been testing Thymeleaf and that is the most common usage of Thymeleaf.  However Thymeleaf-TDD can also be used to test Thymesheet variants of Thymeleaf by including an external TSS stylesheet.</p>
+
+<p>There are various methods of including the external file but one simple method is to locate a TSS file within the /src/main/webapp - e.g.</p>
+
+<pre><code>    &lt;link rel="thymesheet" href="thymesheet.tss" /&gt;
+</code></pre>
+
+<p>So we get some HTML as follows,</p>
+
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Lorem Ipsum&lt;/title&gt;
+    &lt;link rel="thymesheet" href="thymesheet.tss" /&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;A heading&lt;/h1&gt;
+    &lt;p&gt;Some text&lt;/p&gt;
+    &lt;p&gt;Some more text&lt;/p&gt;
+
+    &lt;h2&gt;A sub-heading&lt;/h2&gt;
+    &lt;p&gt;Sub text&lt;/p&gt;
+    &lt;p&gt;More sub text&lt;/p&gt;
+    &lt;a href="http://www.example.com/"&gt;A Link&lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>The same tests as described previously can still be applied, but instead of editing the HTML directly, we add rules to thymesheet.tss.</p>
+
+<h3>
+<a name="should-set-title-to-expected-value-1" class="anchor" href="#should-set-title-to-expected-value-1"><span class="octicon octicon-link"></span></a>Should Set Title To Expected Value</h3>
+
+<p>title { th-text: "${pageTitle}"; }</p>
+
+<h3>
+<a name="should-set-heading-to-expected-value-1" class="anchor" href="#should-set-heading-to-expected-value-1"><span class="octicon octicon-link"></span></a> Should Set Heading To Expected Value</h3>
+
+<p>h1 { th-text: "${heading1}"; }</p>
+
+<h3>
+<a name="should-create-three-paragraphs-under-heading-1-1" class="anchor" href="#should-create-three-paragraphs-under-heading-1-1"><span class="octicon octicon-link"></span></a>Should Create Three Paragraphs Under Heading 1</h3>
+
+<p>h1 + p { th-each: "para : ${section1Paragraphs}"; }
+h1 + p + P { th-remove: "all"; }</p>
+
+<h3>
+<a name="should-create-three-paragraphs-under-heading-1-with-expected-content-1" class="anchor" href="#should-create-three-paragraphs-under-heading-1-with-expected-content-1"><span class="octicon octicon-link"></span></a> Should Create Three Paragraphs Under Heading 1 With Expected Content</h3>
+
+<p>h1 + p { th-each: "para : ${section1Paragraphs}"; th-text: "${para}";}</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>If your tests require properties you can create a /src/test/resources/test.properties file which will be picked up by the default Spring configuration supplied with thymeleaf-tdd.</p>
+
+<p>Some specific properties are also supported in the file as follows,</p>
+
+<ul>
+<li>thymeleaf.template.webappPath -- defaults to src/main/webapp</li>
+<li>thymeleaf.template.cache.enabled -- defaults to true</li>
+<li>thymeleaf.template.mode -- defaults to LEGACYHTML5</li>
+<li>thymeleaf.template.characterEncoding -- defaults to UTF-8</li>
+</ul>
       </section>
     </div>
 
