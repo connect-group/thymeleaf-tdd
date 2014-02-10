@@ -9,7 +9,7 @@
 
 	<groupId>com.connect-group</groupId>
 	<artifactId>thymeleaf-tdd</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>Thymeleaf TDD</name>
 	<description>Test-Driven Development framework for Thymeleaf and Thymesheet</description>
@@ -105,7 +105,7 @@
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymesheet-spring3</artifactId>
-			<version>2.1.2</version>
+			<version>2.1.2b-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Thymeleaf dependancy: for HTML that is not XHTML -->
