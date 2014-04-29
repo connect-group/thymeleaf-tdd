@@ -10,7 +10,7 @@ Include the latest release from Maven,
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymeleaf-tdd</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -233,6 +233,8 @@ Thymeleaf-TDD adds the following assertions, for testing against the Thymeleaf D
 * hasOnlyText("text1", "text2", ...) returns true if all of the matched elements contain only text, and the text is the sequence supplied
 * isSingleElementThat() checks that the result is exactly one element and allows you to chain additional matchers.  For example, isSingleElementThat(hasClasses("myclass"))
 * occursOnce() returns true if exactly one element was found
+* hasTextBefore() tests the text at the beginning of an element, prior to its first child.
+* hasTextAfter() tests the text at the end of an element, following its last child
 
 ## Thymesheet TDD
 Up to now we have been testing Thymeleaf and that is the most common usage of Thymeleaf.  However Thymeleaf-TDD can also be used to test Thymesheet variants of Thymeleaf by including an external TSS stylesheet.
