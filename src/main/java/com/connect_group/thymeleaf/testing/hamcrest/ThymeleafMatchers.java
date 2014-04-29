@@ -1,12 +1,11 @@
 package com.connect_group.thymeleaf.testing.hamcrest;
 
-import java.util.Collection;
-
+import com.connect_group.thymesheet.query.HtmlElement;
+import com.connect_group.thymesheet.query.HtmlElements;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 
-import com.connect_group.thymesheet.query.HtmlElement;
-import com.connect_group.thymesheet.query.HtmlElements;
+import java.util.Collection;
 
 public abstract class ThymeleafMatchers {
 
@@ -69,5 +68,15 @@ public abstract class ThymeleafMatchers {
 	public static Matcher<Collection<?>> occursOnce() {
 	    return new OccursOnce();
 	}
+
+    @Factory
+    public static Matcher<HtmlElement> hasTextBeforeElement( String text ) {
+        return new HasTextBeforeElement(text);
+    }
+
+    @Factory
+    public static Matcher<HtmlElement> hasTextAfterElement( String text ) {
+        return new HasTextAfterElement(text);
+    }
 
 }

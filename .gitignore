@@ -5,3 +5,5 @@ target/
 .project
 
 *.prefs
+
+thymeleaf-tdd.iml
