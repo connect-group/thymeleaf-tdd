@@ -1,7 +1,7 @@
 package com.connect_group.thymeleaf.testing;
 
 import com.connect_group.thymesheet.query.HtmlElements;
-import com.connect_group.thymesheet.spring3.SpringThymesheetTemplateEngine;
+import com.connect_group.thymesheet.spring4.SpringThymesheetTemplateEngine;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
