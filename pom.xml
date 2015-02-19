@@ -9,7 +9,7 @@
 
 	<groupId>com.connect-group</groupId>
 	<artifactId>thymeleaf-tdd</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 
 	<name>Thymeleaf TDD</name>
 	<description>Test-Driven Development framework for Thymeleaf and Thymesheet</description>

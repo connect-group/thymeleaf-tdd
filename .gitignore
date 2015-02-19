@@ -1,9 +1,6 @@
 target/
-
 .classpath
-
 .project
-
 *.prefs
-
 thymeleaf-tdd.iml
+/.idea/

@@ -11,5 +11,7 @@
 		<p data-th-each="para : ${section2Paragraphs}" data-th-text="${para}">Sub text</p>
 		<p data-th-remove="all">More sub text</p>
 		<a data-th-href="${href}" href="http://www.example.com/">A Link</a>
+    
+        <pre data-th-text="#{my_resource_message}">Text should be replaced with copy from i18n resource bundle.</pre>
 	</body>
 </html>

@@ -1,17 +1,8 @@
 package com.connect_group.thymeleaf.testing;
 
-import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.exists;
-import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.hasAttribute;
-import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.hasOnlyText;
-import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.isSingleElementThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.connect_group.thymeleaf.testing.config.TestMessageSource;
+import com.connect_group.thymeleaf.testing.config.ThymesheetTestSpringContext;
+import com.connect_group.thymesheet.query.HtmlElements;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.connect_group.thymeleaf.testing.config.ThymesheetTestSpringContext;
-import com.connect_group.thymesheet.query.HtmlElements;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.exists;
+import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.hasAttribute;
+import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.hasOnlyText;
+import static com.connect_group.thymeleaf.testing.hamcrest.ThymeleafMatchers.isSingleElementThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { ThymesheetTestSpringContext.class })
@@ -32,6 +32,9 @@ public class SampleUnitTest {
 	
 	@Autowired
 	private ThymeleafTestEngine testEngine;
+    
+    @Autowired
+    private TestMessageSource messageSource;
 
 	@Before
 	public void setup() {
@@ -83,7 +86,13 @@ public class SampleUnitTest {
 	public void shouldSpecifyExpectedUrlInLink() throws Exception {
 		model.put("href", "http://expected/target/url");
 		HtmlElements tags = testEngine.process(HTML_PATH_IN_TEST_RESOURCES_FOLDER, model);
-		assertThat(tags.matching("body > a"), isSingleElementThat(hasAttribute("href", "http://expected/target/url")));		
-		
+		assertThat(tags.matching("body > a"), isSingleElementThat(hasAttribute("href", "http://expected/target/url")));
 	}
+    
+    @Test
+    public void shouldUseTextFromResourceBundle_WhenPreTagRefersToMessageSourceKey() throws Exception {
+        messageSource.givenMessageWithKey("my_resource_message", "Expected i18n copy");
+        HtmlElements tags = testEngine.process(HTML_PATH_IN_TEST_RESOURCES_FOLDER, model);
+        assertThat(tags.matching("body > pre"), isSingleElementThat(hasOnlyText("Expected i18n copy")));
+    }
 }

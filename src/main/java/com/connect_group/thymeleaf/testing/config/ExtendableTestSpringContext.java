@@ -50,6 +50,12 @@ public abstract class ExtendableTestSpringContext extends WebMvcConfigurerAdapte
         return configurer;
     }
 
+    @Bean
+    public TestMessageSource messageSource() {
+        TestMessageSource messageSource = new TestMessageSource();
+        return messageSource;
+    }
+
     public static String getTestResourcesHtmlPath(String filename) {
         String path;
         URL url = ThymesheetTestSpringContext.class.getResource(filename);
