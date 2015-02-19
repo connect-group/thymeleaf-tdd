@@ -2,6 +2,7 @@ thymeleaf-tdd
 =============
 
 Test Driven Development framework for Spring (3 and 4) with Thymeleaf and Thymesheet.
+_Source for Spring 4 is on the 'spring4' branch_
 
 ## Maven
 
