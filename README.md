@@ -1,7 +1,7 @@
 thymeleaf-tdd
 =============
 
-Test Driven Development framework for Spring with Thymeleaf and Thymesheet.
+Test Driven Development framework for Spring (3 and 4) with Thymeleaf and Thymesheet.
 
 ## Maven
 
@@ -10,6 +10,15 @@ Include the latest release from Maven,
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymeleaf-tdd</artifactId>
+			<version>1.0.4</version>
+			<scope>test</scope>
+		</dependency>
+		
+If you are using Spring 4, the dependancy is slightly different.
+
+		<dependency>
+			<groupId>com.connect-group</groupId>
+			<artifactId>thymeleaf-tdd-spring4</artifactId>
 			<version>1.0.4</version>
 			<scope>test</scope>
 		</dependency>
