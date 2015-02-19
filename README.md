@@ -10,7 +10,7 @@ Include the latest release from Maven,
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymeleaf-tdd</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.4</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -71,6 +71,10 @@ So an empty JUnit test class appears as follows,
     public class SampleUnitTest {
         @Autowired
         private ThymeleafTestEngine testEngine;
+        
+        @Autowired
+        private TestMessageSource messageSource;
+
     }
 
 
@@ -89,6 +93,8 @@ To begin with, imagine you have been supplied a HTML file by your frontend devel
         <p>Sub text</p>
         <p>More sub text</p>
         <a href="http://www.example.com/">A Link</a>
+        
+        <pre>Some i18n copy goes here</pre>
       </body>
     </html>
 
@@ -183,6 +189,8 @@ So what is being output? Lets take a look...
         <p>Sub text</p>
         <p>More sub text</p>
         <a href="http://www.example.com/">A Link</a>
+        
+        <pre>Some i18n copy goes here</pre>
       </body>
     </html>
 
@@ -214,6 +222,28 @@ OK so we can add the text in now - with the data-th-text tag.
         <p data-th-each="para : ${section1Paragraphs}" data-th-text="${para}">Some text</p>
 
 Run the test again - Green bar! The test passes.
+
+### Should Use Resource Bundle Text in Pre Section
+Often the copy on the website will come from i18n resource bundles.  These are usually handled by Spring MessageSource configurations.
+
+Within Thymeleaf-TDD 1.0.4 you can test for these as well.  As always in TDD, the test comes first.
+
+    @Test
+    public void shouldUseTextFromResourceBundle_WhenPreTagRefersToMessageSourceKey() throws Exception {
+        messageSource.givenMessageWithKey("my_resource_message", "Expected i18n copy");
+        HtmlElements tags = testEngine.process(HTML_PATH_IN_TEST_RESOURCES_FOLDER, model);
+        assertThat(tags.matching("body > pre"), isSingleElementThat(hasOnlyText("Expected i18n copy")));
+    }
+
+Run the test, and it should fail because the original HTML copy is being returned 
+
+		<pre>Some i18n copy goes here</pre>
+		
+Now we can add the Thymeleaf attribute to the HTML source.
+
+	<pre data-th-text="#{my_resource_message}">Some i18n copy goes here</pre>
+	
+Now when we run the test we get a 'green bar' - test has passed.
 
 ## A note on Hamcrest
 These test assertions have been designed around the Hamcrest assertion model. For more information see http://hamcrest.org/JavaHamcrest/ and for a handy quick reference see http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf
