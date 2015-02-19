@@ -1,10 +1,7 @@
 package com.connect_group.thymeleaf.testing.config;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-
+import com.connect_group.thymeleaf.testing.ThymeleafTestEngine;
+import com.connect_group.thymesheet.templatemode.ThymesheetStandardTemplateModeHandlers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -14,14 +11,15 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.thymeleaf.cache.StandardCacheManager;
 import org.thymeleaf.dialect.IDialect;
-import org.thymeleaf.spring3.view.ThymeleafViewResolver;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.ITemplateModeHandler;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import com.connect_group.thymeleaf.testing.ThymeleafTestEngine;
-import com.connect_group.thymesheet.templatemode.ThymesheetStandardTemplateModeHandlers;
+import javax.servlet.ServletContext;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 public class ThymesheetConfig {

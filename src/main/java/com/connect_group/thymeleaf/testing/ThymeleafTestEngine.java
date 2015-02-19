@@ -1,16 +1,7 @@
 package com.connect_group.thymeleaf.testing;
 
-import java.io.StringReader;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.connect_group.thymesheet.query.HtmlElements;
+import com.connect_group.thymesheet.spring3.SpringThymesheetTemplateEngine;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -18,11 +9,18 @@ import org.thymeleaf.context.IWebContext;
 import org.thymeleaf.dom.Document;
 import org.thymeleaf.dom.Element;
 import org.thymeleaf.dom.Node;
-import org.thymeleaf.spring3.context.SpringWebContext;
+import org.thymeleaf.spring4.context.SpringWebContext;
 import org.thymeleaf.templateparser.html.LegacyHtml5TemplateParser;
 
-import com.connect_group.thymesheet.query.HtmlElements;
-import com.connect_group.thymesheet.spring3.SpringThymesheetTemplateEngine;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.StringReader;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ThymeleafTestEngine extends SpringThymesheetTemplateEngine {
 	
