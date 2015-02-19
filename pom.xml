@@ -150,6 +150,19 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+
+            <!-- Maven Deployment mvn clean deploy -P sonatype-oss-release -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.4</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <stagingProfileId>14b1865cd4eab2</stagingProfileId>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 </project>
