@@ -133,10 +133,11 @@ The test will fail because we have not added the Thymeleaf tag to the HTML yet! 
 Now we have to update the title by adding in a data-th-text attribute.
 
         <title data-th-text="${pageTitle}">Lorem Ipsum</title>
-
+        
 Save the file, run the test: Green bar!  We have written our first unit test.
 
-### Should Set Heading To Expected Value
+
+### Should Set Heading To Expected Value
 Similarly the "H1" can be set by first writing a test to set the heading, 
 
     @Test
@@ -211,7 +212,7 @@ We have 3 copies of "Some text", plus the "Some more text" which was in the orig
 
 Run the test again: Green bar!
 
-### Should Create Three Paragraphs Under Heading 1 With Expected Content
+### Should Create Three Paragraphs Under Heading 1 With Expected Content
 That's great but as we saw above, all we are testing for is how many paragraphs are output.  We have not tested for the CONTENT of each paragraph.  So lets add a test in for that now.
 
     @Test
@@ -255,7 +256,7 @@ Now we can add the Thymeleaf attribute to the HTML source.
 	
 Now when we run the test we get a 'green bar' - test has passed.
 
-## A note on Hamcrest
+## A Note on Hamcrest
 These test assertions have been designed around the Hamcrest assertion model. For more information see http://hamcrest.org/JavaHamcrest/ and for a handy quick reference see http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf
 
 Thymeleaf-TDD adds the following assertions, for testing against the Thymeleaf DOM,
