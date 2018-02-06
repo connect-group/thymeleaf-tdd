@@ -308,14 +308,14 @@ The same tests as described previously can still be applied, but instead of edit
 ### Should Set Title To Expected Value
 title { th-text: "${pageTitle}"; }
 
-### Should Set Heading To Expected Value
+### Should Set Heading To Expected Value
 h1 { th-text: "${heading1}"; }
 
 ### Should Create Three Paragraphs Under Heading 1
 h1 + p { th-each: "para : ${section1Paragraphs}"; }
 h1 + p + P { th-remove: "all"; }
 
-### Should Create Three Paragraphs Under Heading 1 With Expected Content
+### Should Create Three Paragraphs Under Heading 1 With Expected Content
 h1 + p { th-each: "para : ${section1Paragraphs}"; th-text: "${para}";}
 
 
