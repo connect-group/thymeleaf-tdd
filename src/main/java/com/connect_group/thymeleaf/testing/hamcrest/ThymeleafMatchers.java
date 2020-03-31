@@ -19,6 +19,11 @@ public abstract class ThymeleafMatchers {
   }
 
   @Factory
+  public static Matcher<HtmlElement> hasAttributeWithAnyNonNullValue(String attributeName) {
+    return new HasAttribute(attributeName, true);
+  }
+
+  @Factory
   public static Matcher<HtmlElement> hasAttribute(String attributeName, String attributeValue) {
     return new HasAttribute(attributeName, attributeValue);
   }
@@ -77,5 +82,4 @@ public abstract class ThymeleafMatchers {
   public static Matcher<HtmlElement> hasTextAfterElement(String text) {
     return new HasTextAfterElement(text);
   }
-
 }
