@@ -25,5 +25,13 @@ public class IsSingleElementThat extends TypeSafeMatcher<HtmlElements> {
     return elements.size() == 1 && individualMatcher.matches(elements.get(0));
   }
 
-
+  @Override
+  protected void describeMismatchSafely(HtmlElements elements, Description mismatchDescription) {
+    if (elements.size() == 1) {
+      individualMatcher.describeMismatch(elements.get(0), mismatchDescription);
+    } else {
+       mismatchDescription.appendText("was not a single element ");
+       individualMatcher.describeMismatch(elements, mismatchDescription);
+    }
+  }
 }
