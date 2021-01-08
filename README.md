@@ -11,7 +11,7 @@ Include the latest release from Maven,
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymeleaf-tdd</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 			<scope>test</scope>
 		</dependency>
 		
@@ -20,7 +20,7 @@ If you are using Spring 4, the dependancy is slightly different.
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymeleaf-tdd-spring4</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -237,7 +237,7 @@ Run the test again - Green bar! The test passes.
 ### Should Use Resource Bundle Text in Pre Section
 Often the copy on the website will come from i18n resource bundles.  These are usually handled by Spring MessageSource configurations.
 
-Within Thymeleaf-TDD 1.0.4 you can test for these as well.  As always in TDD, the test comes first.
+Within Thymeleaf-TDD 1.0.5 you can test for these as well.  As always in TDD, the test comes first.
 
     @Test
     public void shouldUseTextFromResourceBundle_WhenPreTagRefersToMessageSourceKey() throws Exception {
