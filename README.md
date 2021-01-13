@@ -1,7 +1,8 @@
 thymeleaf-tdd
 =============
 
-Test Driven Development framework for Spring with Thymeleaf and Thymesheet.
+Test Driven Development framework for Spring (3 and 4) with Thymeleaf and Thymesheet.
+_Source for Spring 3 is on the 'spring3' branch_
 
 ## Maven
 
@@ -10,11 +11,20 @@ Include the latest release from Maven,
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymeleaf-tdd</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.6</version>
+			<scope>test</scope>
+		</dependency>
+		
+If you are using Spring 4, the dependancy is slightly different.
+
+		<dependency>
+			<groupId>com.connect-group</groupId>
+			<artifactId>thymeleaf-tdd-spring4</artifactId>
+			<version>1.0.6</version>
 			<scope>test</scope>
 		</dependency>
 
-Thymeleaf-TDD makes use of the full Hamcrest suite (version 1.3), and JUnit 4.11; these will be pulled in as dependancies when you include thymeleaf-tdd.
+Thymeleaf-TDD makes use of the full Hamcrest suite (version 1.3), and JUnit 4.13; these will be pulled in as dependancies when you include thymeleaf-tdd.
 
 
 ## What is Thymeleaf?
@@ -71,6 +81,10 @@ So an empty JUnit test class appears as follows,
     public class SampleUnitTest {
         @Autowired
         private ThymeleafTestEngine testEngine;
+        
+        @Autowired
+        private TestMessageSource messageSource;
+
     }
 
 
@@ -89,6 +103,8 @@ To begin with, imagine you have been supplied a HTML file by your frontend devel
         <p>Sub text</p>
         <p>More sub text</p>
         <a href="http://www.example.com/">A Link</a>
+        
+        <pre>Some i18n copy goes here</pre>
       </body>
     </html>
 
@@ -117,10 +133,11 @@ The test will fail because we have not added the Thymeleaf tag to the HTML yet! 
 Now we have to update the title by adding in a data-th-text attribute.
 
         <title data-th-text="${pageTitle}">Lorem Ipsum</title>
-
+        
 Save the file, run the test: Green bar!  We have written our first unit test.
 
-### Should Set Heading To Expected Value
+
+### Should Set Heading To Expected Value
 Similarly the "H1" can be set by first writing a test to set the heading, 
 
     @Test
@@ -183,6 +200,8 @@ So what is being output? Lets take a look...
         <p>Sub text</p>
         <p>More sub text</p>
         <a href="http://www.example.com/">A Link</a>
+        
+        <pre>Some i18n copy goes here</pre>
       </body>
     </html>
 
@@ -193,7 +212,7 @@ We have 3 copies of "Some text", plus the "Some more text" which was in the orig
 
 Run the test again: Green bar!
 
-### Should Create Three Paragraphs Under Heading 1 With Expected Content
+### Should Create Three Paragraphs Under Heading 1 With Expected Content
 That's great but as we saw above, all we are testing for is how many paragraphs are output.  We have not tested for the CONTENT of each paragraph.  So lets add a test in for that now.
 
     @Test
@@ -215,7 +234,29 @@ OK so we can add the text in now - with the data-th-text tag.
 
 Run the test again - Green bar! The test passes.
 
-## A note on Hamcrest
+### Should Use Resource Bundle Text in Pre Section
+Often the copy on the website will come from i18n resource bundles.  These are usually handled by Spring MessageSource configurations.
+
+Within Thymeleaf-TDD 1.0.5 you can test for these as well.  As always in TDD, the test comes first.
+
+    @Test
+    public void shouldUseTextFromResourceBundle_WhenPreTagRefersToMessageSourceKey() throws Exception {
+        messageSource.givenMessageWithKey("my_resource_message", "Expected i18n copy");
+        HtmlElements tags = testEngine.process(HTML_PATH_IN_TEST_RESOURCES_FOLDER, model);
+        assertThat(tags.matching("body > pre"), isSingleElementThat(hasOnlyText("Expected i18n copy")));
+    }
+
+Run the test, and it should fail because the original HTML copy is being returned 
+
+		<pre>Some i18n copy goes here</pre>
+		
+Now we can add the Thymeleaf attribute to the HTML source.
+
+	<pre data-th-text="#{my_resource_message}">Some i18n copy goes here</pre>
+	
+Now when we run the test we get a 'green bar' - test has passed.
+
+## A Note on Hamcrest
 These test assertions have been designed around the Hamcrest assertion model. For more information see http://hamcrest.org/JavaHamcrest/ and for a handy quick reference see http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf
 
 Thymeleaf-TDD adds the following assertions, for testing against the Thymeleaf DOM,
@@ -267,14 +308,14 @@ The same tests as described previously can still be applied, but instead of edit
 ### Should Set Title To Expected Value
 title { th-text: "${pageTitle}"; }
 
-### Should Set Heading To Expected Value
+### Should Set Heading To Expected Value
 h1 { th-text: "${heading1}"; }
 
 ### Should Create Three Paragraphs Under Heading 1
 h1 + p { th-each: "para : ${section1Paragraphs}"; }
 h1 + p + P { th-remove: "all"; }
 
-### Should Create Three Paragraphs Under Heading 1 With Expected Content
+### Should Create Three Paragraphs Under Heading 1 With Expected Content
 h1 + p { th-each: "para : ${section1Paragraphs}"; th-text: "${para}";}
 
 

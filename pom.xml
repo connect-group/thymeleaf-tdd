@@ -9,7 +9,7 @@
 
 	<groupId>com.connect-group</groupId>
 	<artifactId>thymeleaf-tdd-spring4</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.6</version>
 
 	<name>Thymeleaf TDD</name>
 	<description>Test-Driven Development framework for Thymeleaf and Thymesheet</description>
@@ -50,23 +50,23 @@
 			<url>http://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
+			<id>sonatype-nexus-releases</id>
+			<name>Sonatype Nexus Releases</name>
 			<url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<springframework.version>4.1.0.RELEASE</springframework.version>
-		<java-version>1.6</java-version>
+		<springframework.version>4.3.30.RELEASE</springframework.version>
+		<java-version>1.8</java-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.13.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.hamcrest</groupId>
@@ -105,14 +105,14 @@
 		<dependency>
 			<groupId>com.connect-group</groupId>
 			<artifactId>thymesheet-spring4</artifactId>
-			<version>2.1.2</version>
+			<version>2.2.0</version>
 		</dependency>
 		
 		<!-- Thymeleaf dependancy: for HTML that is not XHTML -->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.18</version>
+            <version>1.9.21</version>
         </dependency>
 		
 
@@ -151,7 +151,9 @@
 				</configuration>
 			</plugin>
 
-            <!-- Maven Deployment mvn clean deploy -P sonatype-oss-release -->
+
+
+            <!-- mvn clean deploy -P sonatype-oss-release -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
